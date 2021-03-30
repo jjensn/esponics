@@ -1,0 +1,109 @@
+esphome:
+  name: esp_water_controller
+  platform: ESP8266
+  board: nodemcuv2
+  includes:
+    - etape.h
+wifi:
+  ssid: "xxxx"
+  password: "xxxxx"
+
+  # Enable fallback hotspot (captive portal) in case wifi connection fails
+  ap:
+    ssid: "Esp Water Valve Fallback Hotspot"
+    password: "f8vKtMrOmuTY"
+
+captive_portal:
+
+# Enable logging
+logger:
+  level: DEBUG
+  esp8266_store_log_strings_in_flash: False
+
+# Enable Home Assistant API
+api:
+
+ota:
+
+sensor:
+  - platform: custom
+    lambda: |-
+      auto etape_sensor = new ETapeSensor(id(ha_input_number_water_empty_resistance), id(ha_input_number_water_full_resistance), id(ha_input_number_water_level_total_units), id(ha_binary_switch_water_pump));
+      App.register_component(etape_sensor);
+      return {etape_sensor->etape_sensor, etape_sensor->voltage_sensor, etape_sensor->resistance_sensor, etape_sensor->raw_etape_sensor};
+    sensors:
+      - name: "ESP Water Level"
+        unit_of_measurement: gal
+        accuracy_decimals: 2
+        # filters:
+        #   - sliding_window_moving_average:
+        #       window_size: 120
+        #       send_every: 15
+      - name: "ESP eTape Voltage"
+        unit_of_measurement: mV
+        accuracy_decimals: 0
+      - name: "ESP eTape Resistance"
+        unit_of_measurement: ohms
+        accuracy_decimals: 2
+      - name: "ESP True Water Level"
+        unit_of_measurement: gal
+        accuracy_decimals: 2
+
+  - platform: homeassistant
+    id: 'ha_input_number_water_empty_resistance'
+    entity_id: input_number.esp_water_empty_resistance
+    internal: true
+
+  - platform: homeassistant
+    id: 'ha_input_number_water_full_resistance'
+    entity_id: input_number.esp_water_full_resistance
+    internal: true
+
+  - platform: homeassistant
+    id: 'ha_input_number_water_level_total_units'
+    entity_id: input_number.water_level_total_units
+    internal: true
+
+text_sensor:
+  - platform: homeassistant
+    id: 'ha_switch_flood_pump'
+    entity_id: switch.flood_pump
+    internal: true
+
+binary_sensor:
+  - platform: gpio
+    pin: 
+      number: D6
+      inverted: True
+    name: "ESP Max Water Level"
+
+  - platform: gpio
+    pin: D1
+    name: "ESP Water Flow Chiller"
+
+  - platform: gpio
+    pin: D0
+    name: "ESP Water Flow Plants"
+
+  - platform: template
+    id: 'ha_binary_switch_water_pump'
+    internal: true
+    lambda: |-
+      std::string val = id(ha_switch_flood_pump).state;
+      if (val.c_str() == std::string("on")) {
+        return true;
+      } else {
+        return false;
+      }
+
+switch:
+  - platform: gpio
+    pin: D5
+    name: "ESP Water Valve"
+  - platform: gpio
+    pin: D8
+    name: "ESP Water Supply"
+
+# time:
+#   - platform: homeassistant
+#     id: homeassistant_time

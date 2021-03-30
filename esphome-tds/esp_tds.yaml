@@ -1,0 +1,48 @@
+esphome:
+  name: esp_tds
+  platform: ESP8266
+  board: nodemcuv2
+  includes:
+    - GravityTDS.h
+    - tds_sensor.h
+wifi:
+  ssid: "xxxxx"
+  password: "xxxx"
+
+  # Enable fallback hotspot (captive portal) in case wifi connection fails
+  ap:
+    ssid: "Esp Water Level Fallback Hotspot"
+    password: "MBBi1CqUFqs0"
+
+captive_portal:
+
+# Enable logging
+logger:
+  level: DEBUG
+  esp8266_store_log_strings_in_flash: False
+
+# Enable Home Assistant API
+api:
+
+ota:
+
+sensor:
+  - platform: custom
+    lambda: |-
+      auto tds_sensor = new TdsSensor(id(ha_esp_nutrient_temperature));
+      App.register_component(tds_sensor);
+      return {tds_sensor->tds_sensor, tds_sensor->voltage_sensor};
+    sensors:
+      - name: "ESP TDS"
+        unit_of_measurement: ppm
+        accuracy_decimals: 2
+      - name: "ESP TDS Voltage"
+        unit_of_measurement: mV
+        accuracy_decimals: 0
+        
+        
+  - platform: homeassistant
+    name: "Nutrient temperature"
+    id: 'ha_esp_nutrient_temperature'
+    entity_id: sensor.esp_nutrient_temperature
+    internal: true

@@ -1,0 +1,92 @@
+esphome:
+  name: esp_nutrients
+  platform: ESP8266
+  board: nodemcuv2
+  includes:
+    - base_grav.h
+    - ph_grav.h
+    - ph_sensor.h
+    
+  libraries:
+    - "EEPROM"
+
+
+wifi:
+  ssid: "xxxx"
+  password: "xxxxx"
+
+  # Enable fallback hotspot (captive portal) in case wifi connection fails
+  ap:
+    ssid: "Esp Nutrients Fallback Hotspot"
+    password: "UeUXZrYbhTqZ"
+
+captive_portal:
+
+# Enable logging
+logger:
+  level: DEBUG
+  esp8266_store_log_strings_in_flash: False
+
+# Enable Home Assistant API
+api:
+
+ota:
+
+dallas:
+  - pin: D0
+
+sensor:
+  - platform: dallas
+    address: 0xB93C01B607839828
+    name: "ESP Nutrient Temperature"
+  # - platform: adc
+  #   pin: A0
+  #   id: ph
+  #   name: "pH Sensor"
+  #   update_interval: 1s
+  #   unit_of_measurement: pH
+  - platform: custom
+    lambda: |-
+      auto ph_sensor = new AtlasScientificPHSensor(id(ha_input_number_ph_low), id(ha_input_number_ph_mid), id(ha_input_number_ph_high));
+      App.register_component(ph_sensor);
+      return {ph_sensor->ph_sensor, ph_sensor->voltage_sensor, ph_sensor->resistance_sensor};
+    sensors:
+      - name: "ESP pH"
+        unit_of_measurement: pH
+        accuracy_decimals: 2
+      - name: "ESP pH Voltage"
+        unit_of_measurement: mV
+        accuracy_decimals: 0
+      - name: "ESP pH Resistance"
+        unit_of_measurement: ohms
+        accuracy_decimals: 2
+
+  - platform: homeassistant
+    id: 'ha_input_number_ph_low'
+    entity_id: input_number.ph_low
+    internal: true
+
+  - platform: homeassistant
+    id: 'ha_input_number_ph_mid'
+    entity_id: input_number.ph_mid
+    internal: true
+
+  - platform: homeassistant
+    id: 'ha_input_number_ph_high'
+    entity_id: input_number.ph_high
+    internal: true
+switch:
+  - platform: gpio
+    id: "esp_ph_up"
+    name: "pH Up"
+    restore_mode: ALWAYS_OFF
+    pin:
+      number: D3
+      inverted: yes
+  - platform: gpio
+    id: "esp_ph_down"
+    name: "pH Down"
+    restore_mode: ALWAYS_OFF
+    pin:
+      number: D4
+      inverted: yes
