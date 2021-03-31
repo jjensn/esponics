@@ -11,23 +11,19 @@ class ETapeSensor : public PollingComponent, public Sensor {
     esphome::sensor::Sensor* tFull;
     esphome::sensor::Sensor* tUnits;
     esphome::binary_sensor::BinarySensor* tPump;
-
-    float fOldReading;
   
   public:
     // constructor
     
-    ETapeSensor(esphome::sensor::Sensor* empty, esphome::sensor::Sensor* full, esphome::sensor::Sensor* units, esphome::binary_sensor::BinarySensor* pump) : PollingComponent(15000) {
+    ETapeSensor(esphome::sensor::Sensor* empty, esphome::sensor::Sensor* full, esphome::sensor::Sensor* units) : PollingComponent(15000) {
       tEmpty = empty;
       tFull = full;
       tUnits = units;
-      tPump = pump;
     };
 
     Sensor *etape_sensor = new Sensor();
     Sensor *voltage_sensor = new Sensor();
     Sensor *resistance_sensor = new Sensor();
-    Sensor *raw_etape_sensor = new Sensor();
 
     float get_setup_priority() const override { return esphome::setup_priority::DATA; }
     
@@ -58,17 +54,9 @@ class ETapeSensor : public PollingComponent, public Sensor {
       float voltage = analogRead(SENSOR_PIN);
       float resistance = readResistance(voltage, SERIES_RESISTOR);
       float volume = resistanceToVolume(resistance, tEmpty->state, tFull->state, tUnits->state);
-      //ESP_LOGD("custom", "%s", tPump->state);
-      if(!tPump->state) {
-        fOldReading = volume;
-      }
-      if(fOldReading != fOldReading) {
-        // NaN check
-        fOldReading = tUnits->state;
-      }
-      etape_sensor->publish_state(fOldReading);
+  
       voltage_sensor->publish_state(voltage);
       resistance_sensor->publish_state(resistance);
-      raw_etape_sensor->publish_state(volume);
+      etape_sensor->publish_state(volume);
     }
 };

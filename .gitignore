@@ -1,1 +1,4 @@
 .DS_Store
+src/**/_*.yaml
+src/**/.esphome/
+src/**/esp_*/

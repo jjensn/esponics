@@ -38,15 +38,15 @@ I absolutely want to credit Reddit user [u/ghoofman](https://www.reddit.com/user
 
 
 ## 3D models:
-- [Peristaltic pump holders (credit to /u/ghoofman)](models/gx/motor_mount_original.gx)
-- [Peristaltic pump holders w/ mounts](models/gx/motor_mount_with_brackets.gx)
-- [pH bottle holder (credit to /u/ghoofman)](models/gx/ph_holder.gx)
-- [pH bottle caps with cable gland hole](models/gx/ph_cap.gx)
-- [1" PVC e-tape holder](models/gx/1_in_etape_holder.gx)
-- [TDS and pH probe holder for 1" PVC](models/gx/ts_ph_probe_holder.gx)
-- Buck converter case ([top](models/gx/buck_converter_top.gx) / [bottom](models/gx/buck_converter_bottom.gx))
-- [Float switch holder](models/gx/float_switch_holder.gx)
-- SunFounder dual relay box ([top](models/gx/dual_relay_top.gx) / [bottom](models/gx/dual_relay_bottom.gx))
+- [Peristaltic pump holders (credit to /u/ghoofman)](https://raw.githubusercontent.com/jjensn/esponics/master/models/gx/motor_mount_original.gx)
+- [Peristaltic pump holders w/ mounts](https://raw.githubusercontent.com/jjensn/esponics/master/models/gx/motor_mount_with_brackets.gx)
+- [pH bottle holder (credit to /u/ghoofman)](https://raw.githubusercontent.com/jjensn/esponics/master/models/gx/ph_holder.gx)
+- [pH bottle caps with cable gland hole](https://raw.githubusercontent.com/jjensn/esponics/master/models/gx/ph_cap.gx)
+- [1" PVC e-tape holder](https://raw.githubusercontent.com/jjensn/esponics/master/models/gx/1_in_etape_holder.gx)
+- [TDS and pH probe holder for 1" PVC](https://raw.githubusercontent.com/jjensn/esponics/master/models/gx/ts_ph_probe_holder.gx)
+- Buck converter case ([top](https://raw.githubusercontent.com/jjensn/esponics/master/models/gx/buck_converter_top.gx) / [bottom](https://raw.githubusercontent.com/jjensn/esponics/master/models/gx/buck_converter_bottom.gx))
+- [Float switch holder](https://raw.githubusercontent.com/jjensn/esponics/master/models/gx/float_switch_holder.gx)
+- SunFounder dual relay box ([top](https://raw.githubusercontent.com/jjensn/esponics/master/models/gx/dual_relay_top.gx) / [bottom](https://raw.githubusercontent.com/jjensn/esponics/master/models/gx/dual_relay_bottom.gx))
 
 
 ## Parts:
